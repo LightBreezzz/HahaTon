@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Arena - Главная</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">🎮 Cyber Arena</div>
+            <nav class="nav" id="nav">
+                <!-- Навигация загружается через JS -->
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h1>Добро пожаловать в Cyber Arena</h1>
+                <p class="subtitle">Забронируй игровое место прямо сейчас!</p>
+                <div id="auth-buttons">
+                    <button class="btn btn-primary" onclick="showLoginModal()">Войти</button>
+                    <button class="btn btn-secondary" onclick="showRegisterModal()">Регистрация</button>
+                </div>
+                <div id="user-info" style="display: none;">
+                    <p>Добро пожаловать, <span id="user-name"></span>!</p>
+                    <a href="calendar.html" class="btn btn-primary">Забронировать</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="zones-preview">
+            <div class="container">
+                <h2>Наши зоны</h2>
+                <div id="zones-list" class="zones-grid">
+                    <div class="loading">Загрузка...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Почему мы?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🖥️</span>
+                        <h3>Топовое железо</h3>
+                        <p>RTX 4060, 240Hz мониторы, механические клавиатуры</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">⚡</span>
+                        <h3>Быстрое бронирование</h3>
+                        <p>Забронируй место за пару кликов</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🏆</span>
+                        <h3>Достижения</h3>
+                        <p>Получай награды за активность</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">👥</span>
+                        <h3>Командные комнаты</h3>
+                        <p>Играйте с друзьями в отдельных комнатах</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно входа -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            <h2>Вход</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Пароль</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Войти</button>
+            </form>
+            <p class="form-footer">Нет аккаунта? <a href="#" onclick="switchModal('login-modal', 'register-modal')">Зарегистрироваться</a></p>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Имя</label>
+                    <input type="text" id="register-name" required minlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Пароль</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Зарегистрироваться</button>
+            </form>
+            <p class="form-footer">Уже есть аккаунт? <a href="#" onclick="switchModal('register-modal', 'login-modal')">Войти</a></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Cyber Arena. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+        // Загрузка зон при загрузке страницы
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadZonesPreview();
+            checkAuth();
+        });
+
+        async function loadZonesPreview() {
+            try {
+                const zones = await api.getZones();
+                const container = document.getElementById('zones-list');
+                
+                if (zones.length === 0) {
+                    container.innerHTML = '<p class="empty-state">Зон пока нет</p>';
+                    return;
+                }
+                
+                container.innerHTML = zones.slice(0, 3).map(zone => `
+                    <div class="zone-card">
+                        <div class="zone-type">${getZoneTypeIcon(zone.zone_type)}</div>
+                        <h3>${zone.name}</h3>
+                        <p class="zone-description">${zone.description || ''}</p>
+                        <p class="zone-price">${zone.price_per_hour} ₽/час</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('zones-list').innerHTML = '<p class="error-state">Ошибка загрузки зон</p>';
+            }
+        }
+
+        function getZoneTypeIcon(type) {
+            const icons = { gaming: '🎮', training: '🎯', team_room: '👥' };
+            return icons[type] || type;
+        }
+    </script>
+</body>
+</html>

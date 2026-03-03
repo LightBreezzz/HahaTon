@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь занятости - Cyber Arena</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">🎮 Cyber Arena</div>
+            <nav class="nav" id="nav"></nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <h1>Календарь занятости</h1>
+            
+            <div class="calendar-controls">
+                <div class="form-group">
+                    <label for="zone-select">Выберите зону</label>
+                    <select id="zone-select">
+                        <option value="">Все зоны</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date-input">Дата</label>
+                    <input type="date" id="date-input">
+                </div>
+                <button class="btn btn-primary" onclick="loadSchedule()">Показать</button>
+            </div>
+
+            <div id="schedule-container">
+                <div class="loading">Загрузка расписания...</div>
+            </div>
+
+            <div id="booking-form-container" class="booking-form-container" style="display: none;">
+                <h2>Новое бронирование</h2>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="booking-zone">Зона</label>
+                        <select id="booking-zone" required>
+                            <option value="">Выберите зону</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-date">Дата</label>
+                        <input type="date" id="booking-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-start">Время начала</label>
+                        <input type="time" id="booking-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-end">Время окончания</label>
+                        <input type="time" id="booking-end" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-comment">Комментарий</label>
+                        <textarea id="booking-comment" rows="2"></textarea>
+                    </div>
+                    <div id="booking-message"></div>
+                    <button type="submit" class="btn btn-primary btn-full">Забронировать</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Cyber Arena. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/calendar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadZonesForSelect();
+            
+            // Устанавливаем сегодняшнюю дату
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-input').value = today;
+            document.getElementById('booking-date').value = today;
+            
+            loadSchedule();
+        });
+    </script>
+</body>
+</html>

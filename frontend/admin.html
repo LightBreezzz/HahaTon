@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Cyber Arena</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">🎮 Cyber Arena Admin</div>
+            <nav class="nav" id="nav"></nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <h1>Админ-панель</h1>
+            
+            <div id="admin-stats" class="stats-grid">
+                <div class="loading">Загрузка статистики...</div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('bookings')">Бронирования</button>
+                <button class="tab-btn" onclick="showTab('zones')">Зоны</button>
+                <button class="tab-btn" onclick="showTab('users')">Пользователи</button>
+            </div>
+
+            <div id="tab-bookings" class="tab-content active">
+                <div class="tab-header">
+                    <h2>Все бронирования</h2>
+                    <button class="btn btn-secondary" onclick="loadAdminBookings()">Обновить</button>
+                </div>
+                <div id="admin-bookings-list">
+                    <div class="loading">Загрузка...</div>
+                </div>
+            </div>
+
+            <div id="tab-zones" class="tab-content">
+                <div class="tab-header">
+                    <h2>Управление зонами</h2>
+                    <button class="btn btn-primary" onclick="showZoneForm()">Добавить зону</button>
+                </div>
+                <div id="zone-form-container" style="display: none;">
+                    <form id="zone-form" class="admin-form">
+                        <div class="form-group">
+                            <label for="zone-name">Название</label>
+                            <input type="text" id="zone-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone-description">Описание</label>
+                            <textarea id="zone-description" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone-type">Тип</label>
+                            <select id="zone-type" required>
+                                <option value="gaming">Игровая зона</option>
+                                <option value="training">Тренировочная зона</option>
+                                <option value="team_room">Командная комната</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zone-capacity">Вместимость</label>
+                                <input type="number" id="zone-capacity" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="zone-price">Цена (₽/час)</label>
+                                <input type="number" id="zone-price" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone-equipment">Оборудование</label>
+                            <textarea id="zone-equipment" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+                <div id="admin-zones-list">
+                    <div class="loading">Загрузка...</div>
+                </div>
+            </div>
+
+            <div id="tab-users" class="tab-content">
+                <h2>Пользователи</h2>
+                <div id="admin-users-list">
+                    <div class="loading">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Cyber Arena. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminAuth();
+            loadAdminStats();
+        });
+    </script>
+</body>
+</html>

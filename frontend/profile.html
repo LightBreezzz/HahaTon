@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Cyber Arena</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">🎮 Cyber Arena</div>
+            <nav class="nav" id="nav"></nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <h1>Мой профиль</h1>
+            
+            <div id="profile-container">
+                <div class="loading">Загрузка...</div>
+            </div>
+
+            <div class="profile-sections">
+                <section class="profile-section">
+                    <h2>Мои бронирования</h2>
+                    <div id="bookings-list">
+                        <div class="loading">Загрузка бронирований...</div>
+                    </div>
+                </section>
+
+                <section class="profile-section">
+                    <h2>Мои достижения</h2>
+                    <div id="achievements-list">
+                        <div class="loading">Загрузка достижений...</div>
+                    </div>
+                </section>
+
+                <section class="profile-section">
+                    <h2>Статистика</h2>
+                    <div id="stats-container" class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value" id="stat-total-bookings">0</span>
+                            <span class="stat-label">Всего бронирований</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="stat-active-bookings">0</span>
+                            <span class="stat-label">Активных бронирований</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="stat-achievements">0</span>
+                            <span class="stat-label">Достижений</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Cyber Arena. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/profile.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadProfile();
+        });
+    </script>
+</body>
+</html>
